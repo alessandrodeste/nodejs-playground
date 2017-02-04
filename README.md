@@ -1,13 +1,13 @@
 # NodeJs Playground
 
-This is a small project used to test libraries.
+This is a simple scaffolding project used to test libraries.
 
 ## What you can find here
 
-- MongoDb for handle Users collection
 - Express implementation for rest services
 - Simple Passport usage for local signage
 - Cors support
+- Users collection CRUD with MongoDb persistence
 
 ## How to use
 
@@ -42,6 +42,7 @@ npm run dev
 - Some other collection
 - Angular2 SPA Frontend
 - React SPA Frontend
+- Yarn
 
 ## Thank you
 
