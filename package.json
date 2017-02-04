@@ -1,0 +1,29 @@
+{
+  "name": "nodejs-playground",
+  "version": "0.0.1",
+  "description": "NodeJs Server Playground",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon ./src/index.js"
+  },
+  "author": "ale.deste <alessandrodeste+github@gmail.com>",
+  "license": "ApacheV2",
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.16.0",
+    "cors": "^2.8.1",
+    "express": "^4.14.1",
+    "jwt-simple": "^0.5.1",
+    "lodash": "^4.17.4",
+    "moment": "^2.17.1",
+    "mongoose": "^4.8.0",
+    "morgan": "^1.7.0",
+    "passport": "^0.3.2",
+    "passport-jwt": "^2.2.1",
+    "passport-local": "^1.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
+}
