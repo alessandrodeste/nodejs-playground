@@ -27,8 +27,12 @@ npm run dev
 - OAuth2 with google
 - Tests
 - Some other collection
+- Angular2 SPA Frontend
+- React SPA Frontend
 
 ## Thank you
+- [Stephen Grider](https://www.udemy.com/user/sgslo/) great Udemy courses
 - [Passport flow overview](http://toon.io/understanding-passportjs-authentication-flow/) great guide
 - [Token!](https://auth0.com/blog/2014/01/07/angularjs-authentication-with-cookies-vs-token/) Great token example
-- [Stephen Grider](https://www.udemy.com/user/sgslo/) great Udemy courses
+- [JWT](http://jwt.io/)
+- [csrf and node](http://sporcic.org/2012/06/csrf-with-nodejs-and-express/)
