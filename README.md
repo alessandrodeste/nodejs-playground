@@ -17,6 +17,12 @@ Install packages
 npm install
 ```
 
+Copy and edit configuration file
+
+```bash
+cp ./src/config.tpl.js ./src/config.js
+```
+
 Install mongo collection and default user
 
 ```bash
