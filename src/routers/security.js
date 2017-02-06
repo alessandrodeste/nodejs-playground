@@ -11,13 +11,15 @@ const requireSignin = passport.authenticate('local', { session: false });
 
 router.route('/logout').get(function(req, res) {
 	// FIXME: token is still in memory... how can I revoke it?
-	req.logout();
-	res.send(200);
+	// TODO delete token
+	// req.logout();
+	res.status(200).json({message: "logged out"});
 });
 
-// Ping if is logged in
-router.route('/loggedin').get(function(req, res) {
-	//res.send(req.isAuthenticated() ? { 'user': req.user } : '0');
+// Return the logged user
+// TODO: refresh token?
+router.route('/loggedin').get(requireAuth, function(req, res) {
+	res.json({ 'user': req.user });
 });
 
 router.route('/signin').post(requireSignin, Authentication.signin);
