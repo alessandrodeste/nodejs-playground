@@ -39,10 +39,9 @@ npm run dev
 
 - OAuth2 with google
 - Tests
-- Some other collection
 - Yarn
 - Token collection
-- CRUD with partials information of documents
+- Some other collection
 - Angular2 SPA Frontend
 - [React SPA Frontend](https://github.com/alessandrodeste/react-playground)
 

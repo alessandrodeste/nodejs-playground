@@ -1,5 +1,5 @@
 // code for initializing the DB w/ an admin user
-const mongoose     = require('mongoose');
+const mongoose = require('mongoose');
 
 const setupMongo = {
     
