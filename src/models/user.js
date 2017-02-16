@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const bcrypt = require('bcrypt-nodejs');
+const _ = require('lodash');
 
 // Constants
 const SALT_WORK_FACTOR 	    = 10;
@@ -44,9 +45,9 @@ const userSchema = new Schema({
 // enum: expose enum on the model, and provide an internal convenience reference 
 //---------------------------
 var reasons = userSchema.statics.failedLogin = {
-		NOT_FOUND: 0,
-		PASSWORD_INCORRECT: 1,
-		MAX_ATTEMPTS: 2
+	NOT_FOUND: 0,
+	PASSWORD_INCORRECT: 1,
+	MAX_ATTEMPTS: 2
 };
 
 //---------------------------
@@ -158,6 +159,17 @@ userSchema.statics.getAuthenticated = function(email, password, cb) {
 			});
 		});
 	});
+};
+
+//------------------------------------------------------------------
+// return cleanup user (no sensible information)
+//------------------------------------------------------------------
+userSchema.statics.filterOutputUser = function(user) {
+	if ( user ) {
+		return _.omit(user, ['local', 'google', 'loginAttempts']);		
+	} else {
+		return null;
+	}
 };
 
 // Create the model class

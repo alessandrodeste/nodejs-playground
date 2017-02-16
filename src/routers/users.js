@@ -8,9 +8,14 @@ router.route('/')
 	.get(Authentication.checkRole(Authentication.Roles.USER), function(req, res) {
 		User.find(function(err, users) {
 			if (err) { res.send(err); }
-			res.json(_.filter(users, function(user){ 
-				return user.role < req.user.role || user.id === req.user.id; 
-			}));
+			res.json(
+				_.map(
+					_.filter(users, function(user){ 
+						return user.role < req.user.role || user.id === req.user.id; 
+					}), function(user) {
+						return User.filterOutputUser(user.toObject());
+					})
+			);
 		});
 	})
 
@@ -38,7 +43,7 @@ router.route('/:user_id')
 			else if (user.role >= req.user.role && user.id !== req.user.id) 
 				res.status(204).json({ message: 'user not found' });
 			else
-				res.json(user);
+				res.json(User.filterOutputUser(user.toObject()));
 			});
 	})
 		
