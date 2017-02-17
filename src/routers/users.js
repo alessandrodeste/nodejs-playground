@@ -7,15 +7,20 @@ const _ = require('lodash');
 router.route('/')
 	.get(Authentication.checkRole(Authentication.Roles.USER), function(req, res) {
 		User.find(function(err, users) {
-			if (err) { res.send(err); }
-			res.json(
-				_.map(
+			if (err) res.status(500).json({ message: err.message });
+			else {
+				const list = _.map(
 					_.filter(users, function(user){ 
 						return user.role < req.user.role || user.id === req.user.id; 
 					}), function(user) {
 						return User.filterOutputUser(user.toObject());
-					})
-			);
+					});
+				
+				if (list.length < 1)
+					res.status(204).json({ message: "no content" });
+				else
+					res.json(list);
+			}
 		});
 	})
 
@@ -30,8 +35,10 @@ router.route('/')
 			'local.password': req.body.password
 		});
 		user.save(function(err) {
-			if (err) res.status(422).json({ message: "email duplicated" });
-			else res.json({ message: 'user created' });
+			if (err) 
+				res.status(422).json({ message: "email duplicated" });
+			else 
+				res.status(201).json({ message: 'user created' });
 		});
 	});
 
@@ -39,7 +46,8 @@ router.route('/:user_id')
 
 	.get(Authentication.checkRoleOrItsMe(Authentication.Roles.ADMIN), function(req, res) {
 		User.findById(req.params.user_id, function(err, user) {
-			if (err)res.send(err); 
+			if (err) 
+				res.status(500).json({ message: err.message });
 			else if (user.role >= req.user.role && user.id !== req.user.id) 
 				res.status(204).json({ message: 'user not found' });
 			else
@@ -49,21 +57,28 @@ router.route('/:user_id')
 		
 	.put(Authentication.checkRoleOrItsMe(Authentication.Roles.ADMIN), function(req, res) {
 		User.findById(req.params.user_id, function(err, user) {
-			if (err) { return res.send(err); }
-			if (user.role >= req.user.role && user.id !== req.user.id) { return res.status(401).json({ message: 'Unauthorized' }); }
+			if (err) { 
+				return res.status(500).json({ message: err.message }); 
+			}
+			if (user.role >= req.user.role && user.id !== req.user.id) { 
+				return res.status(401).json({ message: 'Unauthorized' }); 
+			}
 
 			const check = function(fieldName) {
 				if (req.body[fieldName] !== undefined)
 					user[fieldName] = req.body[fieldName];
 			};
 
+			check("username");
 			check("first_name");
 			check("family_name");
 			if (req.body.password !== undefined) user.local.password = req.body.password;
 			
 			user.save(function(err) {
-				if (err) res.send(err);
-				else res.json({ message: 'user updated' });
+				if (err) 
+					res.status(500).json({ message: err.message });
+				else 
+					res.json({ message: 'user updated' });
 			});
 		});
 	})
@@ -72,8 +87,10 @@ router.route('/:user_id')
 		User.remove({
 			_id: req.params.user_id
 		}, function(err, task) {
-			if (err) res.send(err);
-			else res.json({ message: 'Successfully deleted' });
+			if (err) 
+				res.status(500).json({ message: err.message });
+			else 
+				res.json({ message: 'Successfully deleted' });
 		});
 	});
 
