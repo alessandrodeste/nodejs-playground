@@ -42,7 +42,7 @@ npm run dev
 - Yarn
 - Token collection
 - Some other collection
-- Angular2 SPA Frontend
+- [Angular2 SPA Frontend](https://github.com/alessandrodeste/angular2-playground.git)
 - [React SPA Frontend](https://github.com/alessandrodeste/react-playground)
 
 ## Thank you
