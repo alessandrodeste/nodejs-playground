@@ -6,7 +6,7 @@ module.exports = {
 		dbUrl: process.env.DB_URI                       // The base url of the MongoDB Server
 	},
 	server: {
-		listenPort: process.env.NODEJS_PORT || process.env.PORT || 3000,    // The port on which the server is to listen (means that the app is at http://localhost:3000 for instance)
+		listenPort: process.env.PORT || 3000,           // The port on which the server is to listen (means that the app is at http://localhost:3000 for instance)
 		securePort: 8433,                               // The HTTPS port on which the server is to listen (means that the app is at https://localhost:8433 for instance)
 		ip: process.env.IP || "0.0.0.0"
 	},
