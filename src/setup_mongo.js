@@ -2,8 +2,8 @@
 // To db setup:
 // node setup_mongo.js
 
-var config       = require('./config');
-var initDB       = require('./helpers/setup_mongo');
+const config       = require('./config');
+const initDB       = require('./helpers/setup_mongo');
 
 console.log('************** START');
 

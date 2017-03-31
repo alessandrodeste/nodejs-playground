@@ -15,8 +15,12 @@ const config = require('./config');
 // Configure routing
 const router = require('./routers/index');
 
+// DB Options
+const options = { server: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 } }, 
+                replset: { socketOptions: { keepAlive: 300000, connectTimeoutMS : 30000 } } };       
+
 // DB Setup
-mongoose.connect('mongodb://' + config.mongo.dbUrl + '/' + config.mongo.dbName); 
+mongoose.connect('mongodb://' + config.mongo.dbUrl + '/' + config.mongo.dbName, options); 
 
 // App Setup
 app.use(morgan('dev'));                             // log every request to the console
