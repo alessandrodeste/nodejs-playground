@@ -8,6 +8,9 @@ This is a simple scaffolding project used to test libraries.
 - Simple Passport usage for local signage
 - Cors support
 - Users collection CRUD with MongoDb persistence
+- [Angular2 SPA Frontend](https://github.com/alessandrodeste/angular2-playground.git)
+- [React SPA Frontend](https://github.com/alessandrodeste/react-playground)
+- [Vue SPA Frontend](https://github.com/alessandrodeste/vue-playground)
 
 ## How to use
 
@@ -39,11 +42,9 @@ npm run dev
 
 - OAuth2 with google
 - Tests
+- Token keep alive lifecycle
 - Yarn
 - Token collection
-- Some other collection
-- [Angular2 SPA Frontend](https://github.com/alessandrodeste/angular2-playground.git)
-- [React SPA Frontend](https://github.com/alessandrodeste/react-playground)
 
 ## Thank you
 
