@@ -3,8 +3,8 @@ const router = express.Router();
 const Authentication = require('../controllers/authentication');
 const User = require('../models/user.js');
 const _ = require('lodash');
-const itemPerPage = 5;
-const maxItemPerPage = 10;
+const itemPerPage = 10;
+const maxItemPerPage = 50;
 
 router.route('/')
 	.get(Authentication.checkRole(Authentication.Roles.USER), function(req, res) {
