@@ -42,9 +42,9 @@ npm run dev
 
 - OAuth2 with google
 - Tests
-- Token keep alive lifecycle
 - Yarn
-- Token collection
+- Refresh Token Collection and Lifecycle
+- Remove use of mongoose default mpromise (is deprecated)
 
 ## Thank you
 

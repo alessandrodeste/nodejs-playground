@@ -3,16 +3,26 @@ const router = express.Router();
 const Authentication = require('../controllers/authentication');
 const User = require('../models/user.js');
 const _ = require('lodash');
+const itemPerPage = 5;
+const maxItemPerPage = 10;
 
 router.route('/')
 	.get(Authentication.checkRole(Authentication.Roles.USER), function(req, res) {
-		User.find(function(err, users) {
+		
+		var orderBy = req.query.orderby ? req.query.orderby : 'email';
+		var query = User.find({ $or: [ { '_id': req.user.id }, { 'role': { $lt: req.user.role } } ] }).sort([[orderBy, 'asc']]);
+		
+		if (req.query.offset !== undefined) {
+			query = query.skip(parseInt(req.query.offset)).limit(itemPerPage);
+		} else {
+			query = query.limit(maxItemPerPage);
+		}
+		
+		query.exec(function(err, users) {
 			if (err) res.status(500).json({ message: err.message });
 			else {
-				const list = _.map(
-					_.filter(users, function(user){ 
-						return user.role < req.user.role || user.id === req.user.id; 
-					}), function(user) {
+				const list = _.map(users, 
+					function(user) {
 						return User.filterOutputUser(user.toObject());
 					});
 				
@@ -63,6 +73,9 @@ router.route('/:user_id')
 			if (user.role >= req.user.role && user.id !== req.user.id) { 
 				return res.status(401).json({ message: 'Unauthorized' }); 
 			}
+			if (req.body['role'] && (req.body['role'] + 0) >= req.user.role){ 
+				return res.status(401).json({ message: 'Unauthorized' }); 
+			}
 
 			const check = function(fieldName) {
 				if (req.body[fieldName] !== undefined)
@@ -72,6 +85,8 @@ router.route('/:user_id')
 			check("username");
 			check("first_name");
 			check("family_name");
+			check("password");
+			check("role");
 			if (req.body.password !== undefined) user.local.password = req.body.password;
 			
 			user.save(function(err) {

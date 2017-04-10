@@ -1,6 +1,5 @@
 var config = {};
-
-var env = process.env.NODE_ENV || 'development';
+const env = process.env.NODE_ENV || 'development';
 
 if (env === 'development') {
   console.log('development config')
