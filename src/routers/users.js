@@ -73,7 +73,7 @@ router.route('/:user_id')
 			if (user.role >= req.user.role && user.id !== req.user.id) { 
 				return res.status(401).json({ message: 'Unauthorized' }); 
 			}
-			if (req.body['role'] && (req.body['role'] + 0) >= req.user.role){ 
+			if (req.body['role'] && (parseInt(req.body['role']) >= req.user.role)){ 
 				return res.status(401).json({ message: 'Unauthorized' }); 
 			}
 
