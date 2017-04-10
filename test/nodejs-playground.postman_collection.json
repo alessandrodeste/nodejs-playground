@@ -2,7 +2,7 @@
 	"variables": [],
 	"info": {
 		"name": "nodejs-playground",
-		"_postman_id": "e79aaf43-5de4-0f2d-5008-26f895e6dd86",
+		"_postman_id": "5d94a0ab-93ae-df6e-1506-79271ab27c4f",
 		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
@@ -26,12 +26,12 @@
 						}
 					],
 					"request": {
-						"url": "localhost:3000\\auth\\signin\\",
+						"url": "{{hostname}}:{{port}}\\auth\\signin\\",
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\"email\":\"admin@test.com\",\n\"password\":\"password\"\n}"
+							"raw": "{\n\"email\":\"admin@test.com\",\n\"password\":\"admin\"\n}"
 						},
 						"description": ""
 					},
@@ -52,7 +52,7 @@
 						}
 					],
 					"request": {
-						"url": "localhost:3000\\auth\\signup",
+						"url": "{{hostname}}:{{port}}\\auth\\signup",
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -72,7 +72,7 @@
 				{
 					"name": "Users",
 					"request": {
-						"url": "localhost:3000\\api\\secured\\users\\",
+						"url": "{{hostname}}:{{port}}\\api\\secured\\users\\",
 						"method": "GET",
 						"header": [
 							{
@@ -89,7 +89,7 @@
 				{
 					"name": "User create",
 					"request": {
-						"url": "localhost:3000\\api\\secured\\users\\",
+						"url": "{{hostname}}:{{port}}\\api\\secured\\users\\",
 						"method": "POST",
 						"header": [
 							{
@@ -114,7 +114,7 @@
 				{
 					"name": "User",
 					"request": {
-						"url": "localhost:3000\\api\\secured\\users\\588e45508945d710fc5ca2bc",
+						"url": "{{hostname}}:{{port}}\\api\\secured\\users\\588e45508945d710fc5ca2bc",
 						"method": "GET",
 						"header": [
 							{
@@ -131,7 +131,7 @@
 				{
 					"name": "User edit",
 					"request": {
-						"url": "localhost:3000\\api\\secured\\users\\588e45508945d710fc5ca2bc",
+						"url": "{{hostname}}:{{port}}\\api\\secured\\users\\588e45508945d710fc5ca2bc",
 						"method": "PUT",
 						"header": [
 							{
@@ -156,7 +156,7 @@
 				{
 					"name": "User delete",
 					"request": {
-						"url": "localhost:3000\\api\\secured\\users\\589611d6d9f2252f4426d0b0",
+						"url": "{{hostname}}:{{port}}\\api\\secured\\users\\589611d6d9f2252f4426d0b0",
 						"method": "DELETE",
 						"header": [
 							{
@@ -175,7 +175,7 @@
 		{
 			"name": "Test",
 			"request": {
-				"url": "localhost:3000\\api\\ping",
+				"url": "{{hostname}}:{{port}}/api/ping",
 				"method": "GET",
 				"header": [],
 				"body": {
@@ -202,7 +202,7 @@
 		{
 			"name": "Test secure",
 			"request": {
-				"url": "localhost:3000\\api\\secured\\ping",
+				"url": "{{hostname}}:{{port}}\\api\\secured\\ping",
 				"method": "GET",
 				"header": [
 					{
