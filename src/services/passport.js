@@ -12,10 +12,11 @@ const localLogin = new LocalStrategy(localOptions, function(email, password, don
 	// if it is the correct email and password
 	// otherwise, call done with false
 	User.getAuthenticated(email, password, function(err, user, reason) {
+			
 		if (err) { return done(err); }
 
 		// login was successful if we have a user
-		if (user) { done(null, user); }
+		if (user) { return done(null, user); }
 
 		// otherwise we can determine why we failed
 		var reasons = User.failedLogin;
@@ -23,13 +24,13 @@ const localLogin = new LocalStrategy(localOptions, function(email, password, don
 			case reasons.MAX_ATTEMPTS:
 				// send email or otherwise notify user that account is
 				// temporarily locked
-				return done(null, false, { message: 'User blocked' });
+				return done(null, false, { message: 'User blocked', code: 'USER_BLOCK' });
 			default:
 			case reasons.NOT_FOUND:
 			case reasons.PASSWORD_INCORRECT:
 				// note: these cases are usually treated the same - don't tell
 				// the user *why* the login failed, only that it did
-				return done(null, false, { message: 'Check user and password' });
+				return done(null, false, { message: 'Check user and password', code: 'WRONG_CREDENTIALS' });
 		}
 	});  
 });
@@ -54,13 +55,13 @@ const jwtLogin = new JwtStrategy(jwtOptions, function(payload, done) {
 			var today = new Date;
 			
 			// is an access token
-			if (payload.iat <= today.setMinutes(today.getMinutes() - 5)) {
-				return done(null, false, { message: "Expired Token" });
+			if (payload.iat <= today.setMinutes(today.getMinutes() - 1)) {
+				return done(null, false, { message: "Expired Token", code: 'TOKEN_EXPIRED' });
 			} else {
-				done(null, user);
+				return done(null, user);
 			} 
 		} else {
-			done(null, false);
+			return done(null, false);
 		}
 	});
 });

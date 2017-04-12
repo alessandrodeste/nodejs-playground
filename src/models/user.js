@@ -72,7 +72,7 @@ userSchema.pre('save', function(next) {
 
 			// overwrite plain text password with encrypted password
 			user.local.password = hash;
-			next();
+			return next();
 		});
 	});
 });
@@ -159,7 +159,7 @@ userSchema.statics.getAuthenticated = function(email, password, cb) {
 			}
 
 			// password is incorrect, so increment login attempts before responding
-			user.incLoginAttempts(function(err) {
+			return user.incLoginAttempts(function(err) {
 				if (err) return cb(err);
 				return cb(null, null, reasons.PASSWORD_INCORRECT);
 			});

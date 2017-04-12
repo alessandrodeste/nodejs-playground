@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const config = require('../config');
 const jwt = require('jwt-simple');
+const passport = require('passport');
 
 exports.signin = function(req, res, next) {
 	// User has already had their email and password auth'd
@@ -106,10 +107,33 @@ exports.checkRole = function(role) {
 	};
 };
 
+exports.passport = function(type) {
+	return (req, res, next) => {
+	    passport.authenticate(type, (err, user, info) => {
+	    	if (err) return next(err);
+	        if (!user) {
+	        	if (info)
+	        		return res.status(401).json( { error: info } );
+	        	else 
+	        		return res.status(401).json( { error: { message: 'Unauthorized', code: 'UNAUTHORIZED' } } );
+	        }
+	        
+	        req.user = user;
+	        return next();
+	    })(req, res, next);
+	};
+}
+
 // A refresh token is valid if is associated to the user and is not expired
 //
 const validateRefreshToken = function(token, callback) {
-	var payload = jwt.decode(token, config.security.jwtSecret);
+	var payload = "";
+	try {
+		payload = jwt.decode(token, config.security.jwtSecret);
+	} catch (err) {
+		callback('Invalid token');
+		return Promise.resolve();
+	}
 	
 	// check if the refersh token exist and is associated with the correct user
 	var query = User.findOne({ '_id': payload.sub, 'local.token': token })
