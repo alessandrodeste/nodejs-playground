@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const bcrypt = require('bcrypt-nodejs');
 const _ = require('lodash');
+const jwt = require('jwt-simple');
+const config = require('../config');
 
 // Constants
 const SALT_WORK_FACTOR 	    = 10;
@@ -18,7 +20,8 @@ const userSchema = new Schema({
 	// Credentials
 	local            : {
 		email        : String,
-		password     : String
+		password     : String,
+		token		 : String
 	},
 	
 	google           : {
@@ -139,15 +142,18 @@ userSchema.statics.getAuthenticated = function(email, password, cb) {
 
 			// check if the password was a match
 			if (isMatch) {
-				// if there's no lock or failed attempts, just return the user
-				if (!user.loginAttempts && !user.lockUntil) return cb(null, user);
-				// reset attempts and lock info
-				var updates = {
-					$set: { loginAttempts: 0 },
+				
+				// reset attempts and lock info and generate the refresh token
+				const token = createToken(user);
+				const updates = {
+					$set: { loginAttempts: 0, 
+							'local.token': token },
 					$unset: { lockUntil: 1 }
 				};
 				return user.update(updates, function(err) {
 					if (err) return cb(err);
+					
+					user.local.token = token;
 					return cb(null, user);
 				});
 			}
@@ -170,6 +176,20 @@ userSchema.statics.filterOutputUser = function(user) {
 	} else {
 		return null;
 	}
+};
+
+//------------------------------------------------------------------
+// return new jwt token
+//------------------------------------------------------------------
+userSchema.statics.createToken = function(user) {
+	return createToken(user);
+};
+
+function createToken(user) {
+	return jwt.encode({ 
+		sub: user._id, 
+		iat: new Date().getTime()
+	}, config.security.jwtSecret);
 };
 
 // Create the model class

@@ -11,6 +11,6 @@ module.exports = {
 		ip: process.env.IP || "0.0.0.0"
 	},
 	security: {
-		jwtSecret: 'jwt-secret-test'
+		jwtSecret: process.env.JWT_SECRET
 	}
 };

@@ -20,7 +20,8 @@
 								"type": "text/javascript",
 								"exec": [
 									"var jsonData = JSON.parse(responseBody);\r",
-									"postman.setEnvironmentVariable(\"token\", jsonData.token);"
+									"postman.setEnvironmentVariable(\"token\", jsonData.token);\r",
+									"postman.setEnvironmentVariable(\"refreshToken\", jsonData.refreshToken);"
 								]
 							}
 						}
@@ -62,6 +63,84 @@
 						"description": ""
 					},
 					"response": []
+				},
+				{
+					"name": "token refresh",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"postman.setEnvironmentVariable(\"token\", jsonData.token);"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{hostname}}:{{port}}\\auth\\token\\refresh\\",
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"token\": \"{{refreshToken}}\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "token reject",
+					"request": {
+						"url": "{{hostname}}:{{port}}\\auth\\token\\reject\\",
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "loggedin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"postman.setEnvironmentVariable(\"user_id\", jsonData.user._id);"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{hostname}}:{{port}}\\auth\\loggedin\\",
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
 				}
 			]
 		},
@@ -72,7 +151,7 @@
 				{
 					"name": "Users",
 					"request": {
-						"url": "{{hostname}}:{{port}}\\api\\secured\\users\\",
+						"url": "{{hostname}}:{{port}}\\api\\secured\\users\\?offset=0&orderby=email",
 						"method": "GET",
 						"header": [
 							{
@@ -114,7 +193,7 @@
 				{
 					"name": "User",
 					"request": {
-						"url": "{{hostname}}:{{port}}\\api\\secured\\users\\588e45508945d710fc5ca2bc",
+						"url": "{{hostname}}:{{port}}\\api\\secured\\users\\{{user_id}}",
 						"method": "GET",
 						"header": [
 							{
@@ -131,7 +210,7 @@
 				{
 					"name": "User edit",
 					"request": {
-						"url": "{{hostname}}:{{port}}\\api\\secured\\users\\588e45508945d710fc5ca2bc",
+						"url": "{{hostname}}:{{port}}\\api\\secured\\users\\{{user_id}}",
 						"method": "PUT",
 						"header": [
 							{
@@ -147,7 +226,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"first_name\": \"test first\",\n\t\"family_name\": \"test family\"\n}"
+							"raw": "{\n\t\"first_name\": \"test first\",\n\t\"family_name\": \"test family\",\n\t\"role\": 2\n}"
 						},
 						"description": ""
 					},
@@ -156,7 +235,7 @@
 				{
 					"name": "User delete",
 					"request": {
-						"url": "{{hostname}}:{{port}}\\api\\secured\\users\\589611d6d9f2252f4426d0b0",
+						"url": "{{hostname}}:{{port}}\\api\\secured\\users\\{{user_id}}",
 						"method": "DELETE",
 						"header": [
 							{

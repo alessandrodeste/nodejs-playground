@@ -48,11 +48,14 @@ const jwtLogin = new JwtStrategy(jwtOptions, function(payload, done) {
 	User.findById(payload.sub, function(err, user) {
 		if (err) { return done(err, false); }
 
-		if (user) {      
+		if (user) {  
+			
 			// Jwt will last 1h
 			var today = new Date;
-			if (payload.iat <= today.setHours(today.getHours() - 1)) {
-					return done(null, false, {message: "Expired Token"});
+			
+			// is an access token
+			if (payload.iat <= today.setMinutes(today.getMinutes() - 5)) {
+				return done(null, false, { message: "Expired Token" });
 			} else {
 				done(null, user);
 			} 

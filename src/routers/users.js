@@ -10,7 +10,11 @@ router.route('/')
 	.get(Authentication.checkRole(Authentication.Roles.USER), function(req, res) {
 		
 		var orderBy = req.query.orderby ? req.query.orderby : 'email';
-		var query = User.find({ $or: [ { '_id': req.user.id }, { 'role': { $lt: req.user.role } } ] }).sort([[orderBy, 'asc']]);
+		var query = User.find(
+			{ $or: [ 
+				{ '_id': req.user.id }, 
+				{ 'role': { $lt: req.user.role } 
+			} ] }).sort([ [ orderBy, 'asc' ] ]);
 		
 		if (req.query.offset !== undefined) {
 			query = query.skip(parseInt(req.query.offset)).limit(itemPerPage);
@@ -27,7 +31,7 @@ router.route('/')
 					});
 				
 				if (list.length < 1)
-					res.status(204).json({ message: "no content" });
+					res.status(204).json({ message: 'no content' });
 				else
 					res.json(list);
 			}
@@ -46,7 +50,7 @@ router.route('/')
 		});
 		user.save(function(err) {
 			if (err) 
-				res.status(422).json({ message: "email duplicated" });
+				res.status(422).json({ message: 'email duplicated' });
 			else 
 				res.status(201).json({ message: 'user created' });
 		});

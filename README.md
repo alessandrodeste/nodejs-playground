@@ -11,6 +11,7 @@ This is a simple scaffolding project used to test libraries.
 - [Angular2 SPA Frontend](https://github.com/alessandrodeste/angular2-playground.git)
 - [React SPA Frontend](https://github.com/alessandrodeste/react-playground)
 - [Vue SPA Frontend](https://github.com/alessandrodeste/vue-playground)
+- JWT, Access token and Refresh token
 
 ## How to use
 
@@ -38,18 +39,22 @@ Run application with nodemon
 npm run dev
 ```
 
-## What I'm working on
+## What I'm working on and open points
 
 - OAuth2 with google
 - Tests
 - Yarn
-- Refresh Token Collection and Lifecycle
 - Remove use of mongoose default mpromise (is deprecated)
+- how to improve token lifecycle? I don't like this result
+- how is implemented mongoose id creation? See refresh token in signup.
+- why signin debug log return 401 but the actual result is 200?
 
 ## Thank you
 
 - [Stephen Grider](https://www.udemy.com/user/sgslo/) great Udemy courses
 - [Passport flow overview](http://toon.io/understanding-passportjs-authentication-flow/) great guide
-- [Token!](https://auth0.com/blog/2014/01/07/angularjs-authentication-with-cookies-vs-token/) great token example
 - [JWT](http://jwt.io/)
 - [csrf and node](http://sporcic.org/2012/06/csrf-with-nodejs-and-express/)
+- [Token!](https://auth0.com/blog/2014/01/07/angularjs-authentication-with-cookies-vs-token/) great token example
+- [More Tokens](https://blog.hyphe.me/using-refresh-tokens-for-permanent-user-sessions-in-node/)
+- [More spanish refresh tokens docs](https://solidgeargroup.com/refresh-token-autenticacion-jwt-implementacion-nodejs?lang=es)

@@ -18,12 +18,12 @@ router.route('/logout').get(function(req, res) {
 
 // Return the logged user
 // TODO: refresh token?
-router.route('/loggedin').get(requireAuth, function(req, res) {
-	res.json({ 'user': req.user });
-});
+router.route('/loggedin').get(requireAuth, Authentication.loggedin);
 
 router.route('/signin').post(requireSignin, Authentication.signin);
 router.route('/signup').post(Authentication.signup);
 
+router.route('/token/refresh').post(Authentication.refreshToken);
+router.route('/token/reject').post(requireAuth, Authentication.rejectToken);
 
 module.exports = router;

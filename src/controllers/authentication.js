@@ -1,16 +1,18 @@
-const jwt = require('jwt-simple');
 const User = require('../models/user');
 const config = require('../config');
-
-function tokenForUser(user) {
-	const timestamp = new Date().getTime();
-	return jwt.encode({ sub: user.id, iat: timestamp }, config.security.jwtSecret);
-}
+const jwt = require('jwt-simple');
 
 exports.signin = function(req, res, next) {
 	// User has already had their email and password auth'd
-	// We just need to give them a token
-	res.send({ token: tokenForUser(req.user) });
+	// We just need to give them a token and the refresh token
+	res.status(200).send({ 
+		token: User.createToken(req.user), 
+		refreshToken: req.user.local.token 
+	});
+}
+
+exports.loggedin = function(req, res, next) {
+	res.json({ 'user': User.filterOutputUser(req.user.toObject()) });
 }
 
 exports.signup = function(req, res, next) {
@@ -39,12 +41,40 @@ exports.signup = function(req, res, next) {
 			'local.password': password
 		});
 
+		// NOTE: I'm not sure about this. Should be MongoDb to create the uniqueId, not mongoose client side. 
+		// How this even works?
+		user.local.token = User.createToken(user);
+		
 		user.save(function(err) {
 			if (err) { return next(err); }
 
 			// Repond to request indicating the user was created
-			res.json({ token: tokenForUser(user) });
+			res.json({ token: User.createToken(user), refreshToken: user.local.token });
 		});
+	});
+}
+
+exports.refreshToken = function(req, res, next) {
+	return validateRefreshToken(req.body.token, function (value) {
+		if (typeof(value) === "string") {
+			res.status(401).send();
+		} else {
+			res.send({ token: User.createToken(value) });	
+		}
+	});
+}
+
+// Remove the refresh token
+// this action is possibile with a valid access token.
+// I'm not happy with this solution, it needs an improvment.
+exports.rejectToken = function(req, res, next) {
+	const updates = {
+		$unset: { 'local.token': 1 }
+	};
+	return req.user.update(updates, function(err) {
+		if (err) return next(err);
+		
+		res.status(204).send('No data');
 	});
 }
 
@@ -63,7 +93,7 @@ exports.checkRoleOrItsMe = function(role) {
 				|| req.user.role >= role))
 			next();
 		else 
-			res.send(401, 'Unauthorized');
+			res.status(401).send('Unauthorized');
 	};
 };
 
@@ -72,6 +102,34 @@ exports.checkRole = function(role) {
 		if (req.user && req.user.role >= role)
 			next();
 		else
-			res.send(401, 'Unauthorized');
+			res.status(401).send('Unauthorized');
 	};
+};
+
+// A refresh token is valid if is associated to the user and is not expired
+//
+const validateRefreshToken = function(token, callback) {
+	var payload = jwt.decode(token, config.security.jwtSecret);
+	
+	// check if the refersh token exist and is associated with the correct user
+	var query = User.findOne({ '_id': payload.sub, 'local.token': token })
+	var promise = query.exec();
+	
+	promise.then(function(user) {
+		if (user) {      
+			// Jwt will last 1h
+			var today = new Date;
+			
+			// is an access token
+			if (payload.iat <= today.setMonth(today.getMonth() - 1)) {
+				callback('Expired Token');
+			} else {
+				callback(user);
+			} 
+		} else {
+			callback('User not find');
+		}
+	});
+	
+	return promise;
 };

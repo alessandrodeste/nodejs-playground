@@ -19,11 +19,18 @@ const router = require('./routers/index');
 const options = { server: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 } }, 
                 replset: { socketOptions: { keepAlive: 300000, connectTimeoutMS : 30000 } } };       
 
+const env = process.env.NODE_ENV || 'development';
+
 // DB Setup
+mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://' + config.mongo.dbUrl + '/' + config.mongo.dbName, options); 
 
 // App Setup
-app.use(morgan('dev'));                             // log every request to the console
+if (env === 'production') {
+    app.use(morgan('common', { skip: function(req, res) { return res.statusCode < 400 } }));
+} else {
+    app.use(morgan('dev'));                         // log every request to the console
+}
 app.use(cors());                                    // enable CORS for all domains
 app.use(bodyParser.json({ type: '*/*' }));
 router(app);
