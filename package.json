@@ -1,6 +1,6 @@
 {
   "name": "nodejs-playground",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "NodeJs Server Playground",
   "main": "index.js",
   "repository": "https://github.com/alessandrodeste/nodejs-playground",
