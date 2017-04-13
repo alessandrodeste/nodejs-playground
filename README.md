@@ -50,6 +50,10 @@ In production (ex. [heroku](https://www.heroku.com/)) the environment variables 
 - DB_NAME
 - DB_URI
 - JWT_SECRET
+ 
+You can find a [Postman](https://www.getpostman.com/) project with all the stub call
+exported in /test/nodejs-playground.postman_collection.json. 
+
 
 ## What I'm working on and open points
 
