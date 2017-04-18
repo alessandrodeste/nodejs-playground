@@ -24,4 +24,6 @@ router.route('/signup').post(Authentication.signup);
 router.route('/token/refresh').post(Authentication.refreshToken);
 router.route('/token/reject').post(requireAuth, Authentication.rejectToken);
 
+router.route('/google/callback').post(Authentication.googleLoggedin);
+
 module.exports = router;

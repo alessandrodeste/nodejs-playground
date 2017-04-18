@@ -57,12 +57,12 @@ exported in /test/nodejs-playground.postman_collection.json.
 
 ## What I'm working on and open points
 
-- OAuth2 with google and passport.js
+- Server side validation of Google OAuth2 client-side authentication ([tricky](https://developers.google.com/identity/sign-in/web/server-side-flow))
 - Tests
 - Yarn
 - Remove use of mongoose default mpromise (is deprecated)
-- how to improve token lifecycle? I don't like this result
-- how is implemented mongoose id creation? See refresh token in signup.
+- how to improve token lifecycle? I don't like the current result
+- how is implemented mongoose id creation? See refresh token in signup
 - why signin debug log return 401 but the actual result is 200?
 - find a non deprecated libraries for bcrypt
 
@@ -75,3 +75,6 @@ exported in /test/nodejs-playground.postman_collection.json.
 - [Token!](https://auth0.com/blog/2014/01/07/angularjs-authentication-with-cookies-vs-token/) great token example
 - [More Tokens](https://blog.hyphe.me/using-refresh-tokens-for-permanent-user-sessions-in-node/)
 - [More spanish refresh tokens docs](https://solidgeargroup.com/refresh-token-autenticacion-jwt-implementacion-nodejs?lang=es)
+- [Postmessage & OAuth 2.0](http://www.riskcompletefailure.com/2013/03/postmessage-oauth-20.html)
+- [Easy Node Authentication: Google](https://scotch.io/tutorials/easy-node-authentication-google)
+- [google endpoints](https://better.fyi/trackers/google.com/)

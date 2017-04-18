@@ -12,6 +12,7 @@
   "author": "ale.deste <alessandrodeste+github@gmail.com>",
   "license": "ApacheV2",
   "dependencies": {
+    "axios": "^0.16.1",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.16.0",
     "cors": "^2.8.1",

@@ -2,6 +2,15 @@ const User = require('../models/user');
 const config = require('../config');
 const jwt = require('jwt-simple');
 const passport = require('passport');
+const axios = require('axios');
+
+exports.Roles = {
+	NONE: 0,
+	DISABLED: 1,
+	USER: 2,
+	ADMIN: 5,
+	SU: 10
+}
 
 exports.signin = function(req, res, next) {
 	// User has already had their email and password auth'd
@@ -55,8 +64,35 @@ exports.signup = function(req, res, next) {
 	});
 }
 
+// Server side validation of oauth2 google client-side authentication
+// Return the user (and create a new one if needed)
+// https://developers.google.com/identity/sign-in/web/server-side-flow
+// TODO
+exports.googleLoggedin = function(req, res, next) {
+	
+	var accessTokenUrl = "https://accounts.google.com/o/oauth2/v2/auth";
+	//var accessTokenUrl = 'https://www.googleapis.com/oauth2/v4/token';
+
+    axios.post(accessTokenUrl, {
+	        client_id:      req.body.client_id,
+	        access_token:   req.body.access_token
+	    })
+		.then(function (response) {
+			
+			console.log("TODO: token", response);
+			// TODO: if token is valid: GET https://www.googleapis.com/userinfo/v2/me
+			// create or return the user
+			
+			next();
+		})
+		.catch(function (error) {
+			console.log("error on google validation", error);
+			next();
+		});
+}
+
 exports.refreshToken = function(req, res, next) {
-	return validateRefreshToken(req.body.token, function (value) {
+	return _validateRefreshToken(req.body.token, function (value) {
 		if (typeof(value) === "string") {
 			res.status(401).send();
 		} else {
@@ -79,13 +115,38 @@ exports.rejectToken = function(req, res, next) {
 	});
 }
 
-exports.Roles = {
-	NONE: 0,
-	DISABLED: 1,
-	USER: 2,
-	ADMIN: 5,
-	SU: 10
-}
+// A refresh token is valid if is associated to the user and is not expired
+const _validateRefreshToken = function(token, callback) {
+	var payload = "";
+	try {
+		payload = jwt.decode(token, config.security.jwtSecret);
+	} catch (err) {
+		callback('Invalid token');
+		return Promise.resolve();
+	}
+	
+	// check if the refersh token exist and is associated with the correct user
+	var query = User.findOne({ '_id': payload.sub, 'local.token': token })
+	var promise = query.exec();
+	
+	promise.then(function(user) {
+		if (user) {      
+			// Jwt will last 1h
+			var today = new Date;
+			
+			// is an access token
+			if (payload.iat <= today.setMonth(today.getMonth() - 1)) {
+				callback('Expired Token');
+			} else {
+				callback(user);
+			} 
+		} else {
+			callback('User not find');
+		}
+	});
+	
+	return promise;
+};
 
 exports.checkRoleOrItsMe = function(role) {
 	return function(req, res, next) {
@@ -124,36 +185,3 @@ exports.passport = function(type) {
 	};
 }
 
-// A refresh token is valid if is associated to the user and is not expired
-//
-const validateRefreshToken = function(token, callback) {
-	var payload = "";
-	try {
-		payload = jwt.decode(token, config.security.jwtSecret);
-	} catch (err) {
-		callback('Invalid token');
-		return Promise.resolve();
-	}
-	
-	// check if the refersh token exist and is associated with the correct user
-	var query = User.findOne({ '_id': payload.sub, 'local.token': token })
-	var promise = query.exec();
-	
-	promise.then(function(user) {
-		if (user) {      
-			// Jwt will last 1h
-			var today = new Date;
-			
-			// is an access token
-			if (payload.iat <= today.setMonth(today.getMonth() - 1)) {
-				callback('Expired Token');
-			} else {
-				callback(user);
-			} 
-		} else {
-			callback('User not find');
-		}
-	});
-	
-	return promise;
-};

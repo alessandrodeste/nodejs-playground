@@ -54,8 +54,8 @@ const jwtLogin = new JwtStrategy(jwtOptions, function(payload, done) {
 			// Jwt will last 1h
 			var today = new Date;
 			
-			// is an access token
-			if (payload.iat <= today.setMinutes(today.getMinutes() - 1)) {
+			// Check if is expired (5 min)
+			if (payload.iat <= today.setMinutes(today.getMinutes() - 5)) {
 				return done(null, false, { message: "Expired Token", code: 'TOKEN_EXPIRED' });
 			} else {
 				return done(null, user);
@@ -66,6 +66,7 @@ const jwtLogin = new JwtStrategy(jwtOptions, function(payload, done) {
 	});
 });
 
+
 // Tell passport to use this strategy
-passport.use(jwtLogin);
 passport.use(localLogin);
+passport.use(jwtLogin);
