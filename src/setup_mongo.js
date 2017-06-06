@@ -13,7 +13,7 @@ const subTaskEnded = function() {
     resolved++;
     if (resolved >= totItems) {
         console.log('************** END');
-        process.exit(1);
+        process.exit(0);
     }
 };
 

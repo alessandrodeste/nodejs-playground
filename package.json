@@ -7,7 +7,8 @@
   "scripts": {
     "start": "node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon ./src/index.js"
+    "dev": "nodemon ./src/index.js",
+    "mongo": "node ./src/setup_mongo.js"
   },
   "author": "ale.deste <alessandrodeste+github@gmail.com>",
   "license": "ApacheV2",

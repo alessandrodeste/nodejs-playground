@@ -36,7 +36,7 @@ const setupMongo = {
                 });
                 console.log('Waiting new Admin User');
             } else {
-                console.log('Admin User already present');
+                console.log('Admin User already installed');
                 done();
             }            
         });

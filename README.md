@@ -37,7 +37,7 @@ Development on localhost or other development environment (ex. [c9](https://c9.i
 npm install
 
 # Install mongo collection and default user
-node ./src/setup_mongo.js
+npm run mongo
 
 # Run application with nodemon
 npm run dev
